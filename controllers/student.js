@@ -8,6 +8,11 @@ exports.getStudents = async (req, res) => {
 
 		if (req.params.courseId) {
 			query = Student.find({ course: req.params.courseId });
+		} else if (req.params.id) {
+			query = Student.find({ _id: req.params.id }).populate({
+				path: 'course',
+				select: 'name duration',
+			});
 		} else {
 			query = Student.find().populate({
 				path: 'course',
@@ -27,24 +32,6 @@ exports.getStudents = async (req, res) => {
 			success: false,
 			err: err.message,
 		});
-	}
-};
-
-// get single student
-exports.getStudent = async (req, res) => {
-	try {
-		const student = await Student.findById(req.params.id);
-
-		if (!student) {
-			throw new Error('Student not exists');
-		}
-
-		res.status(200).json({
-			success: true,
-			student,
-		});
-	} catch (err) {
-		res.status(500).json({ success: false, err: err.message });
 	}
 };
 

@@ -3,7 +3,7 @@ const Course = require('../models/Course');
 // get all course
 exports.getCourses = async (req, res) => {
 	try {
-		const courses = await Course.find({});
+		const courses = await Course.find(req.query);
 		res.json({
 			success: true,
 			count: courses.length,
